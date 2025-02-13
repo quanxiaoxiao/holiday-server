@@ -14,7 +14,7 @@ before(async () => {
   await connectMongo();
 });
 
-test('test', async () => {
+test('getWeeklyRangeOfDateTime', async () => {
   let ret = await getWeeklyRangeOfDateTime(dayjs('2024-12-23', 'YYYY-MM-DD').valueOf());
   assert.deepEqual(
     ret.map((d) => ({ isWorkDay: d.isWorkDay, name: d.name })),
