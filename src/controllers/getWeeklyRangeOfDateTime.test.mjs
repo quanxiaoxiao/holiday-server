@@ -278,7 +278,7 @@ test('getWeeklyRangeOfDateTime', async () => {
 
 test('getWeeklyRangeOfDateTime2', async () => {
   const dateNameStart = '2024-04-01';
-  const dateNameEnd = '2025-01-15';
+  const dateNameEnd = '2025-02-15';
   const dateStart = dayjs(dateNameStart, 'YYYY-MM-DD');
   const dateEnd = dayjs(dateNameEnd, 'YYYY-MM-DD');
   const dateTimeList = generateDateTimeRnage(
