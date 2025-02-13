@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import mongoose from 'mongoose';
 
 import connectMongo from '../connectMongo.mjs';
+import { generateDateTimeRnage } from '../utils/date.mjs';
 import getWeeklyRangeOfDateTime from './getWeeklyRangeOfDateTime.mjs';
 
 before(async () => {
@@ -275,9 +276,30 @@ test('getWeeklyRangeOfDateTime', async () => {
   }
 });
 
-test('getWeeklyRangeOfDateTime2', () => {
-  const dateStart = dayjs('2023-04-01', 'YYYY-MM-DD');
-  const dateEnd = dayjs('2026-01-15', 'YYYY-MM-DD');
+test('getWeeklyRangeOfDateTime2', async () => {
+  const dateNameStart = '2024-04-01';
+  const dateNameEnd = '2025-01-15';
+  const dateStart = dayjs(dateNameStart, 'YYYY-MM-DD');
+  const dateEnd = dayjs(dateNameEnd, 'YYYY-MM-DD');
+  const dateTimeList = generateDateTimeRnage(
+    dateStart.valueOf(),
+    dateEnd.valueOf(),
+  );
+  assert(dateTimeList.length > 0);
+  for (let i = 0; i < dateTimeList.length; i++) {
+    const dateTime = dateTimeList[i];
+    if (i === 0) {
+      assert.equal(dayjs(dateTime).format('YYYY-MM-DD'), dateNameStart);
+    }
+    if (i === dateTimeList.length - 1) {
+      assert.equal(dayjs(dateTime).format('YYYY-MM-DD'), dateNameEnd);
+    }
+    const rangeList = await getWeeklyRangeOfDateTime(dateTime);
+    for (let j = 0; j < rangeList.length; j++) {
+      const rangeList2 = await getWeeklyRangeOfDateTime(rangeList[j].dateTime);
+      assert.deepEqual(rangeList, rangeList2);
+    }
+  }
 });
 
 after(async () => {
