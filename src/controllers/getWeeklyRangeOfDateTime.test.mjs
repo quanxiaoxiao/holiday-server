@@ -275,6 +275,11 @@ test('getWeeklyRangeOfDateTime', async () => {
   }
 });
 
+test('getWeeklyRangeOfDateTime2', () => {
+  const dateStart = dayjs('2023-04-01', 'YYYY-MM-DD');
+  const dateEnd = dayjs('2026-01-15', 'YYYY-MM-DD');
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
