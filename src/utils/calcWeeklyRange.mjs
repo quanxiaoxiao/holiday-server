@@ -2,25 +2,30 @@ import assert from 'node:assert';
 
 import dayjs from 'dayjs';
 
+import {
+  addOneDay,
+  isSaturday,
+  isSunday,
+  subtractOneDay,
+} from './date.mjs';
 import isWorkDay from './isWorkDay.mjs';
 
 const calcEnd = (is, start) => {
   let result = start;
   while (is(result)) {
-    result = dayjs(result).add(1, 'day').valueOf();
+    result = addOneDay(result);
   }
   while (!is(result)) {
-    result = dayjs(result).add(1, 'day').valueOf();
+    result = addOneDay(result);
   }
-  result = dayjs(result).subtract(1, 'day').valueOf();
-  const weekDayWithEndWork = dayjs(result).day();
-  if (weekDayWithEndWork !== 0 && weekDayWithEndWork !== 6) {
+  result = subtractOneDay(result);
+  if (!isSunday(result) && !isSaturday(result)) {
     if (dayjs(start).isSame(result, 'week')) {
       result = dayjs(result).endOf('week').valueOf();
       while (!is(result)) {
-        result = dayjs(result).add(1, 'day').valueOf();
+        result = addOneDay(result);
       }
-      result = dayjs(result).subtract(1, 'day').valueOf();
+      result = subtractOneDay(result);
     }
   }
   assert(!is(result));
@@ -29,17 +34,17 @@ const calcEnd = (is, start) => {
 
 const calcStart = (is, dateTime) => {
   let result = dateTime;
-  if (is(result) && dayjs(result).day() === 0) {
+  if (is(result) && isSunday(result)) {
     return result;
   }
 
   while (!is(result)) {
-    result = dayjs(result).subtract(1, 'day').valueOf();
+    result = subtractOneDay(result);
   }
   while (is(result)) {
-    result = dayjs(result).subtract(1, 'day').valueOf();
+    result = subtractOneDay(result);
   }
-  result = dayjs(result).add(1, 'day').valueOf();
+  result = addOneDay(result);
   assert(is(result));
   const weekDayWithStartWork = dayjs(result).day();
   if (weekDayWithStartWork !== 0 && weekDayWithStartWork !== 1) {
@@ -48,7 +53,7 @@ const calcStart = (is, dateTime) => {
       if (is(beforeDay)) {
         return beforeDay;
       }
-      beforeDay = dayjs(beforeDay).add(1, 'day').valueOf();
+      beforeDay = addOneDay(beforeDay);
     }
   }
   return result;
