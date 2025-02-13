@@ -268,14 +268,10 @@ test('test', async () => {
   ];
   for (let i = 0; i < dayList.length; i++) {
     ret = await getWeeklyRangeOfDateTime(dayjs(dayList[i].name, 'YYYY-MM-DD').valueOf());
-    if (dayList[i].name !== '2025-01-26') {
-      assert.deepEqual(
-        ret.map((d) => ({ isWorkDay: d.isWorkDay, name: d.name })),
-        dayList,
-      );
-    } else {
-      // console.log(ret);
-    }
+    assert.deepEqual(
+      ret.map((d) => ({ isWorkDay: d.isWorkDay, name: d.name })),
+      dayList,
+    );
   }
 });
 

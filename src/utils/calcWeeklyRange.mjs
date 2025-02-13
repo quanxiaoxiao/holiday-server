@@ -34,7 +34,10 @@ const calcEnd = (is, start) => {
 
 const calcStart = (is, dateTime) => {
   let result = dateTime;
-  if (is(result) && isSunday(result)) {
+  if (is(result)
+    && isSunday(result)
+    && is(addOneDay(result))
+  ) {
     return result;
   }
 
