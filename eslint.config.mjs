@@ -32,6 +32,8 @@ export default [
       'no-duplicate-imports': 2,
       'array-callback-return': 2,
       'prefer-const': 2,
+      'no-multi-spaces': 2,
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
       'block-scoped-var': 2,
       'consistent-return': 2,
       'default-case': 2,
