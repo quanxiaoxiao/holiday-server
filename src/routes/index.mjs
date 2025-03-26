@@ -7,7 +7,6 @@ import getWeeklyRangeOfDateTime from '../controllers/getWeeklyRangeOfDateTime.mj
 import { getState } from '../store/store.mjs';
 import compenstationDay from './compenstationDay/index.mjs';
 import holiday from './holiday/index.mjs';
-import todo from './todo/index.mjs';
 
 export default {
   '/api/state': {
@@ -33,5 +32,4 @@ export default {
   },
   ...compenstationDay,
   ...holiday,
-  ...todo,
 };
