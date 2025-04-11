@@ -23,3 +23,5 @@ export const generateDateTimeRnage = (start, end) => {
   }
   return result;
 };
+
+export const isWeekend = (date) => isSaturday(date) || isSunday(date);

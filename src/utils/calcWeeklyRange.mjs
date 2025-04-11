@@ -4,56 +4,56 @@ import dayjs from 'dayjs';
 
 import {
   addOneDay,
-  isSaturday,
   isSunday,
+  isWeekend,
   subtractOneDay,
 } from './date.mjs';
 import isWorkDay from './isWorkDay.mjs';
 
-const calcEnd = (is, start) => {
+const calcEnd = (isWorkDayFn, start) => {
   let result = start;
-  while (is(result)) {
+  while (isWorkDayFn(result)) {
     result = addOneDay(result);
   }
-  while (!is(result)) {
+  while (!isWorkDayFn(result)) {
     result = addOneDay(result);
   }
   result = subtractOneDay(result);
-  if (!isSunday(result) && !isSaturday(result)) {
+  if (!isWeekend(result)) {
     if (dayjs(start).isSame(result, 'week')) {
       result = dayjs(result).endOf('week').valueOf();
-      while (!is(result)) {
+      while (!isWorkDayFn(result)) {
         result = addOneDay(result);
       }
       result = subtractOneDay(result);
     }
   }
-  assert(!is(result));
+  assert(!isWorkDayFn(result));
   return result;
 };
 
-const calcStart = (is, dateTime) => {
+const calcStart = (isWorkDayFn, dateTime) => {
   let result = dateTime;
-  if (is(result)
+  if (isWorkDayFn(result)
     && isSunday(result)
-    && is(addOneDay(result))
+    && isWorkDayFn(addOneDay(result))
   ) {
     return result;
   }
 
-  while (!is(result)) {
+  while (!isWorkDayFn(result)) {
     result = subtractOneDay(result);
   }
-  while (is(result)) {
+  while (isWorkDayFn(result)) {
     result = subtractOneDay(result);
   }
   result = addOneDay(result);
-  assert(is(result));
+  assert(isWorkDayFn(result));
   const weekDayWithStartWork = dayjs(result).day();
   if (weekDayWithStartWork !== 0 && weekDayWithStartWork !== 1) {
     let beforeDay = dayjs(result).startOf('week').valueOf();
     while (dayjs(beforeDay).isBefore(result, 'day')) {
-      if (is(beforeDay)) {
+      if (isWorkDayFn(beforeDay)) {
         return beforeDay;
       }
       beforeDay = addOneDay(beforeDay);
@@ -63,10 +63,10 @@ const calcStart = (is, dateTime) => {
 };
 
 export default (holidayList, compenstationDayList) => {
-  const is = isWorkDay(holidayList, compenstationDayList);
+  const isWorkDayFn = isWorkDay(holidayList, compenstationDayList);
   return (dateTime) => {
-    const start = calcStart(is, dateTime);
-    const end = calcEnd(is, start);
+    const start = calcStart(isWorkDayFn, dateTime);
+    const end = calcEnd(isWorkDayFn, start);
     const diff = dayjs(end).diff(start, 'day');
     const result = [];
     for (let i = 0; i <= diff; i++) {
@@ -74,7 +74,7 @@ export default (holidayList, compenstationDayList) => {
       result.push({
         dateTime: date.valueOf(),
         weekValue: date.day(),
-        isWorkDay: is(date.valueOf()),
+        isWorkDay: isWorkDayFn(date.valueOf()),
         name: date.format('YYYY-MM-DD'),
       });
     }

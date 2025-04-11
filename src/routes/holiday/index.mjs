@@ -5,6 +5,7 @@ import appendHolidayOfDateTime from '../../controllers/holiday/appendHolidayOfDa
 import getHolidays from '../../controllers/holiday/getHolidays.mjs';
 import removeHoliday from '../../controllers/holiday/removeHoliday.mjs';
 import removeHolidayOfDateTime from '../../controllers/holiday/removeHolidayOfDateTime.mjs';
+import updateHoliday from '../../controllers/holiday/updateHoliday.mjs';
 import {
   generateDateTimeRnage,
   isSaturday,
@@ -29,6 +30,9 @@ export default {
           dateTime: {
             type: 'number',
           },
+          description: {
+            type: 'string',
+          },
         },
         required: ['dateTime'],
         additionalProperties: false,
@@ -37,6 +41,9 @@ export default {
         let holidayItem = await appendHolidayOfDateTime(ctx.request.data.dateTime);
         holidayItem = await adjustToHoliday(holidayItem, -1);
         holidayItem = await adjustToHoliday(holidayItem, 1);
+        if (Object.hasOwnProperty.call(ctx.request.data, 'description')) {
+          holidayItem = await updateHoliday(holidayItem, { description: ctx.request.data.description });
+        }
         ctx.response = {
           data: holidayItem,
         };

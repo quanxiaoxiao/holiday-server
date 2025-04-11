@@ -2,7 +2,11 @@ import { createStore } from '@quanxiaoxiao/store';
 
 import initialState from './initialState.mjs';
 
-const { getState, dispatch } = createStore({
+const {
+  getState,
+  dispatch,
+  getValue,
+} = createStore({
   initialState,
   schemas: {
     'server.port': {
@@ -28,4 +32,5 @@ const { getState, dispatch } = createStore({
 export {
   dispatch,
   getState,
+  getValue,
 };

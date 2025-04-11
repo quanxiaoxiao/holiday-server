@@ -14,7 +14,7 @@ import connectMongo from './connectMongo.mjs';
 import logger from './logger.mjs';
 import routes from './routes/index.mjs';
 import { selectRouteMatchList } from './store/selector.mjs';
-import { dispatch,getState } from './store/store.mjs'; // eslint-disable-line
+import { dispatch, getState, getValue } from './store/store.mjs'; // eslint-disable-line
 
 process.nextTick(async () => {
   await connectMongo();
@@ -40,7 +40,7 @@ process.nextTick(async () => {
       handler,
     );
 
-    const { port } = getState().server;
+    const port = getValue('server.port');
 
     server.listen(port, () => {
       console.log(`https server listen at \`${port}\``);
