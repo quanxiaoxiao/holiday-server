@@ -14,7 +14,7 @@ export const addOneDay = (dateTime) => dayjs(dateTime).startOf('day').add(1, 'da
 
 export const subtractOneDay = (dateTime) => dayjs(dateTime).startOf('day').subtract(1, 'day').valueOf();
 
-export const generateDateTimeRnage = (start, end) => {
+export const generateDateTimeRange = (start, end) => {
   const dateStart = dayjs(start).startOf('day');
   const diff = dayjs(end).diff(start, 'day');
   const result = [];
@@ -25,3 +25,7 @@ export const generateDateTimeRnage = (start, end) => {
 };
 
 export const isWeekend = (date) => isSaturday(date) || isSunday(date);
+
+export const toDayStart = (dateTime) => dayjs(dateTime).startOf('day').valueOf();
+
+export const toDayEnd = (dateTime) => dayjs(dateTime).endOf('day').valueOf();

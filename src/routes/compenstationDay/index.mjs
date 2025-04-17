@@ -10,7 +10,7 @@ import removeHoliday from '../../controllers/holiday/removeHoliday.mjs';
 import removeHolidayOfDateTime from '../../controllers/holiday/removeHolidayOfDateTime.mjs';
 import {
   addOneDay,
-  generateDateTimeRnage,
+  generateDateTimeRange,
   isSaturday,
   isSunday,
   subtractOneDay,
@@ -85,7 +85,7 @@ export default {
           const arr = await removeHolidayOfDateTime(dateTime);
           await arr.reduce(async (acc, cur) => {
             await acc;
-            const dateTimeList = generateDateTimeRnage(cur.dateTimeStart, cur.dateTimeEnd);
+            const dateTimeList = generateDateTimeRange(cur.dateTimeStart, cur.dateTimeEnd);
             if (dateTimeList.every((time) => isSunday(time) || isSaturday(time))) {
               await removeHoliday(cur);
             }

@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import mongoose from 'mongoose';
 
 import connectMongo from '../connectMongo.mjs';
-import { generateDateTimeRnage } from '../utils/date.mjs';
+import { generateDateTimeRange } from '../utils/date.mjs';
 import getWeeklyRangeOfDateTime from './getWeeklyRangeOfDateTime.mjs';
 
 before(async () => {
@@ -281,7 +281,7 @@ test('getWeeklyRangeOfDateTime2', async () => {
   const dateNameEnd = '2025-02-15';
   const dateStart = dayjs(dateNameStart, 'YYYY-MM-DD');
   const dateEnd = dayjs(dateNameEnd, 'YYYY-MM-DD');
-  const dateTimeList = generateDateTimeRnage(
+  const dateTimeList = generateDateTimeRange(
     dateStart.valueOf(),
     dateEnd.valueOf(),
   );
