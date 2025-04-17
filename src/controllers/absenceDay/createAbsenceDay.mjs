@@ -13,22 +13,41 @@ export default async (input) => {
     ...input,
   };
 
-  if (input.dateTimeRanges) {
+  if (data.dateTimeRanges) {
     for (let i = 0; i < data.dateTimeRanges.length; i++) {
       const rangeItem = data.dateTimeRanges[i];
       if (rangeItem.length !== 2) {
         throw createError(400);
       }
       const [dateTimeStart, dateTimeEnd] = rangeItem;
-      if (!isSameDay(data.dateTime, dateTimeStart)
-        || !isSameDay(data.dateTime, dateTimeEnd)
-      ) {
+      if (dateTimeStart > dateTimeEnd) {
         throw createError(400);
       }
+      if (data.dateTime != null) {
+        if (!isSameDay(data.dateTime, dateTimeStart)
+          || !isSameDay(data.dateTime, dateTimeEnd)
+        ) {
+          throw createError(400);
+        }
+      } else {
+        if (!isSameDay(dateTimeStart, dateTimeEnd)) {
+          throw createError(400);
+        }
+        data.dateTime = toDayStart(dateTimeStart);
+      }
     }
+  } else {
+    data.dateTimeRanges = [];
+  }
+
+  if (data.dateTime == null) {
+    throw createError(400);
   }
 
   const matched = await AbsenceDayModel.findOne({
+    invalid: {
+      $ne: true,
+    },
     dateTime: {
       $gte: toDayStart(data.dateTime),
       $lte: toDayEnd(data.dateTime),
@@ -46,4 +65,5 @@ export default async (input) => {
   await absenceDayItem.save();
 
   logger.warn(`createAbsenceDay \`${JSON.stringify(input)}\``);
+  return absenceDayItem;
 };
