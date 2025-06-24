@@ -1,4 +1,5 @@
 import createError from 'http-errors';
+import _ from 'lodash';
 
 import adjustToHoliday from '../../controllers/adjustToHoliday.mjs';
 import appendHolidayOfDateTime from '../../controllers/holiday/appendHolidayOfDateTime.mjs';
@@ -33,6 +34,9 @@ export default {
           description: {
             type: 'string',
           },
+          name: {
+            type: 'string',
+          },
         },
         required: ['dateTime'],
         additionalProperties: false,
@@ -41,8 +45,10 @@ export default {
         let holidayItem = await appendHolidayOfDateTime(ctx.request.data.dateTime);
         holidayItem = await adjustToHoliday(holidayItem, -1);
         holidayItem = await adjustToHoliday(holidayItem, 1);
-        if (Object.hasOwnProperty.call(ctx.request.data, 'description')) {
-          holidayItem = await updateHoliday(holidayItem, { description: ctx.request.data.description });
+        if (Object.hasOwnProperty.call(ctx.request.data, 'description')
+          || Object.hasOwnProperty.call(ctx.request.data, 'name')
+        ) {
+          holidayItem = await updateHoliday(holidayItem, _.pick(ctx.request.data, ['name', 'description']));
         }
         ctx.response = {
           data: holidayItem,
