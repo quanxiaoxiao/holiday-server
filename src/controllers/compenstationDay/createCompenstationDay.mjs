@@ -22,5 +22,9 @@ export default async (dateTime, description = '') => {
     description,
   });
   await compenstationDayItem.save();
+  logger.warn(`createCompenstationDay \`${JSON.stringify({
+    dateTime,
+    description,
+  })}\``);
   return compenstationDayItem;
 };
