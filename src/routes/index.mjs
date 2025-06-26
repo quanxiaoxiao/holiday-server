@@ -5,7 +5,6 @@ import { toDataify } from '@quanxiaoxiao/node-utils';
 
 import getWeeklyRangeOfDateTime from '../controllers/getWeeklyRangeOfDateTime.mjs';
 import { getState } from '../store/store.mjs';
-import absenceDay from './absenceDay/index.mjs';
 import compenstationDay from './compenstationDay/index.mjs';
 import holiday from './holiday/index.mjs';
 
@@ -33,5 +32,4 @@ export default {
   },
   ...compenstationDay,
   ...holiday,
-  ...absenceDay,
 };
