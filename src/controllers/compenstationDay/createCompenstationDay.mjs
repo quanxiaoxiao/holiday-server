@@ -6,7 +6,7 @@ import { CompenstationDay as CompenstationDayModel } from '../../models/index.mj
 import { isSaturday, isSunday } from '../../utils/date.mjs';
 import getCompenstationOfDateTime from './getCompenstationOfDateTime.mjs';
 
-export default async (dateTime) => {
+export default async (dateTime, description = '') => {
   const date = dayjs(dateTime);
   if (!isSunday(date) && !isSaturday(dateTime)) {
     logger.warn(`\`createCompenstationDay\` fail, \`dateTime:${dateTime}\` week is not sunday or saturday`);
@@ -19,6 +19,7 @@ export default async (dateTime) => {
   }
   const compenstationDayItem = new CompenstationDayModel({
     dateTime: date.startOf('day').valueOf(),
+    description,
   });
   await compenstationDayItem.save();
   return compenstationDayItem;

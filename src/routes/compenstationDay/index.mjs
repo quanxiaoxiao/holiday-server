@@ -73,13 +73,20 @@ export default {
           dateTime: {
             type: 'number',
           },
+          description: {
+            type: 'string',
+            nullable: true,
+          },
         },
         required: ['dateTime'],
         additionalProperties: false,
       },
       fn: async (ctx)=> {
         const { dateTime } = ctx.request.data;
-        const compenstationDayItem = await createCompenstationDay(dateTime);
+        const compenstationDayItem = await createCompenstationDay(
+          dateTime,
+          ctx.request.data.description,
+        );
         const holidayItem = await getHolidayOfDateTime(dateTime);
         if (holidayItem) {
           const arr = await removeHolidayOfDateTime(dateTime);
