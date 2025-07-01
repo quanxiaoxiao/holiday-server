@@ -4,6 +4,7 @@ import createDateMarker from '../../controllers/dateMarker/createDateMarker.mjs'
 import getDateMarkerById from '../../controllers/dateMarker/getDateMarkerById.mjs';
 import getDateMarkers from '../../controllers/dateMarker/getDateMarkers.mjs';
 import removeDateMarker from '../../controllers/dateMarker/removeDateMarker.mjs';
+import updateDateMarker from '../../controllers/dateMarker/updateDateMarker.mjs';
 
 export default {
   '/api/date-markers': {
@@ -21,6 +22,11 @@ export default {
         properties: {
           name: {
             type: 'string',
+            nullable: true,
+          },
+          tag: {
+            type: 'string',
+            maxLength: 1,
             nullable: true,
           },
           dateTime: {
@@ -57,6 +63,41 @@ export default {
         throw createError(404);
       }
       ctx.dateMarkerItem = dateMarkerItem;
+    },
+    put: {
+      validate: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            nullable: true,
+          },
+          tag: {
+            type: 'string',
+            maxLength: 1,
+            nullable: true,
+          },
+          description: {
+            type: 'string',
+            nullable: true,
+          },
+          color: {
+            type: 'string',
+            nullable: true,
+          },
+          icon: {
+            type: 'string',
+            nullable: true,
+          },
+        },
+        additionalProperties: false,
+      },
+      fn: async (ctx) => {
+        const dateMarkerItemNext = await updateDateMarker(ctx.dateMarkerItem, ctx.request.data);
+        ctx.response = {
+          data: dateMarkerItemNext,
+        };
+      },
     },
     get: (ctx) => {
       ctx.response = {

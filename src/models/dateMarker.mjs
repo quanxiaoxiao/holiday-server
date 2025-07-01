@@ -7,7 +7,7 @@ const dateMarkerSchema = new Schema({
     type: String,
     trim: true,
   },
-  label: {
+  tag: {
     type: String,
     maxLength: 1,
     trim: true,
